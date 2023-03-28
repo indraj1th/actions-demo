@@ -7,7 +7,15 @@
         <h1>Tasks</h1>
         <ul>
             {% for task in tasks %}
-            <li>{{ task.title }} <a href="{{ url_for('complete_task', task_id=task.id) }}">Mark as complete</a> <a href="{{ url_for('delete_task', task_id=task.id) }}">Delete</a></li>
+            <li>{{ task.title }} 
+                <form action="{{ url_for('complete_task', task_id=task.id) }}" method="get">
+                    <input type="submit" value="Mark as complete" />
+                </form>
+                <form action="{{ url_for('delete_task', task_id=task.id) }}" method="get">
+                    <input type="submit" value="Delete" />
+                </form>
             {% endfor %}
         </ul>
-        <a href="{{ url_for('add_task') }}">Add a new
+    
+        <input type="button" onclick="location.href='https://google.com';" value="Go to Google" />
+        <input type="button" onclick="location.href='{{ url_for('add_task') }}';" value="Add new task" />

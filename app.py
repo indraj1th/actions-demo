@@ -22,6 +22,9 @@ def home():
     tasks = Task.query.all()
     return render_template('tasks.html', tasks=tasks)
 
+@app.route('/test')
+def sample():
+    return "hello-test"
 
 @app.route('/add_task', methods=['GET', 'POST'])
 def add_task():
