@@ -93,7 +93,7 @@ jobs:
           registry: '${{ env.GAR_LOCATION }}-docker.pkg.dev'
       - name: Get Tag
         id: vars
-        run: echo ::set-output name=tag::$(git describe --always)
+        run: echo ::set-output name=tag::$(git rev-parse HEAD)
 
       - name: Build and Push Container
         run: |-
