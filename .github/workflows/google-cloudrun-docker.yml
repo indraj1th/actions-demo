@@ -45,6 +45,8 @@
 name: Build and Deploy to Cloud Run
 
 on:
+  push:
+    branches: ["main"]
   release:
     types: [published]
 
@@ -108,7 +110,18 @@ jobs:
           docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/test:${{ steps.vars.outputs.tag }}"
 
       # END - Docker auth and build
-
+      - name: wait for approval
+        uses: trstringer/manual-approval@v1
+        with:
+          secret: ${{ github.TOKEN }}
+          approvers: indraj1th
+          minimum-approvals: 1
+          issue-title: "Deploying v1.3.5 to prod from staging"
+          issue-body: "Please approve or deny the deployment of version v1.3.5."
+          exclude-workflow-initiator-as-approver: false
+          additional-approved-words: ''
+          additional-denied-words: ''
+          
       - name: Deploy to Cloud Run
         id: deploy
         uses: google-github-actions/deploy-cloudrun@v0
