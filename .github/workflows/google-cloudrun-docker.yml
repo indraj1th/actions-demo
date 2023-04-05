@@ -132,6 +132,11 @@ jobs:
           # NOTE: If using a pre-built image, update the image name here
           image: ${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/test:${{ steps.vars.outputs.tag }}
           
+      - name: Test1
+        id: test
+        run: echo "response_time=$(curl -s -w %{time_total}\\n -o /dev/null https://actions-demo-kgzepkpmqq-uc.a.run.app)" >> $GITHUB_OUTPUT
+        if: steps.vars.outputs.response_time < 1
+          
       - name: Test staging  
         uses: cygnetdigital/wait_for_response@v2.0.0
         with:
