@@ -135,7 +135,7 @@ jobs:
       - name: Test1
         id: test
         run: echo "response_time=$(curl -s -w %{time_total}\\n -o /dev/null https://actions-demo-kgzepkpmqq-uc.a.run.app)" >> $GITHUB_OUTPUT
-        if: steps.vars.outputs.response_time < 1
+        if: steps.vars.outputs.response_time == 2
           
       - name: Test staging  
         uses: cygnetdigital/wait_for_response@v2.0.0
