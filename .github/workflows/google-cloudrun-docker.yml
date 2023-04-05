@@ -60,6 +60,7 @@ jobs:
   deploy:
     # Add 'id-token' with the intended permissions for workload identity federation
     permissions:
+      issues: 'write'
       contents: 'read'
       id-token: 'write'
 
