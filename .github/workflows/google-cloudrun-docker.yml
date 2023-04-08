@@ -57,7 +57,7 @@ env:
   REGION: us-central1 # TODO: update Cloud Run service region
 
 jobs:
-  deploy:
+  build-push:
     # Add 'id-token' with the intended permissions for workload identity federation
     permissions:
       issues: 'write'
@@ -98,19 +98,23 @@ jobs:
           registry: '${{ env.GAR_LOCATION }}-docker.pkg.dev'
           
       - name: Get Tag
-        id: vars
+        id: tag
         run: echo "tag=$(git describe --tags --abbrev=0)" >> $GITHUB_OUTPUT
-        
-      - name: Show Tag
-        id: var_t
-        run: echo "${{ steps.vars.outputs.tag }}"
 
       - name: Build and Push Container
         run: |-
-          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/test:${{ steps.vars.outputs.tag }}" ./
-          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/test:${{ steps.vars.outputs.tag }}"
+          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/test:${{ steps.tag.outputs.tag }}" ./
+          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/test:${{ steps.tag.outputs.tag }}"
 
       # END - Docker auth and build
+  deploy:
+    permissions:
+      contents: 'read'
+      id-token: 'write'
+    runs-on: ubuntu-latest
+      
+    steps:
+      
       - name: wait for approval
         uses: trstringer/manual-approval@v1
         with:
