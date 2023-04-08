@@ -60,9 +60,7 @@ jobs:
   build-push:
     # Add 'id-token' with the intended permissions for workload identity federation
     permissions:
-      issues: 'write'
       contents: 'read'
-      id-token: 'write'
 
     runs-on: ubuntu-latest
     steps:
@@ -108,8 +106,9 @@ jobs:
 
       # END - Docker auth and build
   deploy:
+    needs: build-push
     permissions:
-      contents: 'read'
+      issues: 'write'
       id-token: 'write'
     runs-on: ubuntu-latest
       
