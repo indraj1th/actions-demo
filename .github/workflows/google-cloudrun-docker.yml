@@ -50,8 +50,7 @@ on:
   release:
     types: [published]
 
-env:
-  name: dev
+
 
 jobs:
   build-push:
@@ -62,6 +61,8 @@ jobs:
     outputs:
       tag1: ${{ steps.tag.outputs.tag }}
     runs-on: ubuntu-latest
+    environment:
+      name: dev
     steps:
       - name: Checkout
         uses: actions/checkout@v2
