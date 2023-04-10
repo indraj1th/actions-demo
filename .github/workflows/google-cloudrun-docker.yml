@@ -89,7 +89,6 @@ jobs:
       - name: Get Tag
         run: |- 
           echo "${{ vars.GAR_LOCATION }}"
-          echo "${{ vars.GAR_LOCATION }}"
         
       - name: Docker Auth
         id: docker-auth
@@ -105,8 +104,8 @@ jobs:
 
       - name: Build and Push Container
         run: |-
-          docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/test:${{ steps.tag.outputs.tag }}" ./
-          docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/test:${{ steps.tag.outputs.tag }}"
+          docker build -t "${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}/test:${{ steps.tag.outputs.tag }}" ./
+          docker push "${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}/test:${{ steps.tag.outputs.tag }}"
 
       # END - Docker auth and build
   deploy:
