@@ -51,7 +51,6 @@ on:
     types: [published]
 
 
-
 jobs:
   build-push:
     # Add 'id-token' with the intended permissions for workload identity federation
