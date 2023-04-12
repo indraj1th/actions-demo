@@ -41,12 +41,12 @@ jobs:
         needs: verify-version
         permissions:
           id-token: 'write'
-        env:
-          version: ${{needs.verify-version.outputs.version}}
+        #env:
+          #version: ${{needs.verify-version.outputs.version}}
         environment: prod
         runs-on: ubuntu-latest
         # if: github.repository == 'octo-org/octo-repo-prod'
-        if: env.version == 'v0.1.0-alpha'
+        if: needs.verify-version.outputs.version == 'v0.1.0-alpha'
 
         steps:
 
