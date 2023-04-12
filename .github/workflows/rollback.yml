@@ -1,6 +1,6 @@
 # This is a basic workflow that is manually triggered
 
-name: Manual workflow
+name: Manual Rollback
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -19,10 +19,11 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "greet"
-  greet:
+  verify-version:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+    outputs:
+      version: ${{ steps.tag.outputs.version }}
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Runs a single command using the runners shell
@@ -32,5 +33,33 @@ jobs:
           fetch-depth: 0
           
       - name: verify tag
-        run: echo "$(git tag | grep ${{ github.event.inputs.name }})"
+        id: tag
+        run: echo "version=$(git tag | grep -m1 ${{ github.event.inputs.name }})" >> $GITHUB_OUTPUT
       # run: echo "Hello ${{ github.event.inputs.name }}"
+      
+  deploy-to-production:
+        needs: verify-version
+        permissions:
+          id-token: 'write'
+        environment: prod
+        runs-on: ubuntu-latest
+
+        steps:
+
+          - name: Google Auth
+            id: auth
+            uses: 'google-github-actions/auth@v0'
+            with:
+              token_format: 'access_token'
+              workload_identity_provider: '${{ secrets.WIF_PROVIDER }}' # e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
+              service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}' # e.g. - my-service-account@my-project.iam.gserviceaccount.com
+
+
+          - name: Deploy to Cloud Run
+            id: deploy
+            uses: google-github-actions/deploy-cloudrun@v0
+            with:
+              service: ${{ vars.SERVICE }}
+              region: ${{ vars.REGION }}
+              # NOTE: If using a pre-built image, update the image name here
+              image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}/test:${{ needs.verify-version.outputs.version }}
