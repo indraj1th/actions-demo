@@ -43,7 +43,7 @@ jobs:
           id-token: 'write'
         environment: prod
         runs-on: ubuntu-latest
-        if: ${{ needs.verify-version.outputs.version }} != ''
+        if: ${{ needs.verify-version.outputs.version }} != null
 
         steps:
 
