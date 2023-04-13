@@ -38,6 +38,9 @@ jobs:
         
   verify-image:
     # The type of runner that the job will run on
+    permissions:
+      contents: 'read'
+      id-token: 'write'
     runs-on: ubuntu-latest
     # outputs:
       # version: ${{ steps.tag.outputs.version }}
