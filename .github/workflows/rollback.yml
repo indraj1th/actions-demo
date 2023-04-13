@@ -69,11 +69,7 @@ jobs:
               
   invalid-tag:
       needs: verify-version
-      permissions:
-        id-token: 'write'
-      environment: prod
       runs-on: ubuntu-latest
-      # if: github.repository == 'octo-org/octo-repo-prod'
       if: needs.verify-version.outputs.version == ''
 
       steps:
