@@ -148,7 +148,27 @@ jobs:
         # If required, use the Cloud Run url output in later steps
         - name: Show Output
           run: echo ${{ steps.deploy.outputs.url }}
+        - name: Google Auth
+          id: auth
+          uses: 'google-github-actions/auth@v0'
+          with:
+            token_format: 'access_token'
+            workload_identity_provider: '${{ secrets.WIF_PROVIDER }}' # e.g. - projects/123456789/locations/global/workloadIdentityPools/my-pool/providers/my-provider
+            service_account: '${{ secrets.WIF_SERVICE_ACCOUNT }}' # e.g. - my-service-account@my-project.iam.gserviceaccount.com
+            
+        - name: 'Set up Cloud SDK'
+          uses: 'google-github-actions/setup-gcloud@v1'
+          with:
+            version: '>= 363.0.0'
 
+        - name: 'Use gcloud CLI'
+          id: get-tag
+          run: echo "tag=$(gcloud run services describe hello --region=us-central1 | grep Image | awk -F: '{print $3}')" >> $GITHUB_OUTPUT
+          
+        - name: Failure Condition
+          if: steps.get-tag.output != needs.build-push.outputs.tag1
+          run: exit 1
+          
   deploy-to-production:
         needs: test-staging
         permissions:
