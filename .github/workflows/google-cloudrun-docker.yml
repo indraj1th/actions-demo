@@ -182,7 +182,8 @@ jobs:
             echo "image=$(echo "Image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}/${{ vars.SERVICE }}:${{ needs.build-push.outputs.tag1 }} ")" >> $GITHUB_OUTPUT
         
         - name: Failure Condition
-          if: ${{steps.get-tag.outputs.tag}} != ${{steps.image.outputs.image}}
+          if: ${{steps.get-tag.outputs.tag}} == "Image"
+          #if: ${{steps.get-tag.outputs.tag}} != ${{steps.image.outputs.image}}
           #if: steps.get-tag.output != needs.build-push.outputs.tag1
           run: |-
             echo ${{steps.get-tag.outputs.tag}}
