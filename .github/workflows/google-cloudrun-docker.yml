@@ -139,7 +139,9 @@ jobs:
           image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}/${{ vars.SERVICE }}:${{ needs.build-push.outputs.tag1 }}
 
   test-staging:
-      needs: deploy-to-staging
+      needs: 
+        - build-push
+        - deploy-to-staging
       permissions:
         id-token: 'write'
         issues: 'write'
@@ -178,7 +180,7 @@ jobs:
         - name: Failure Condition
           #if: steps.get-tag.output != needs.build-push.outputs.tag1
           run: |-
-            echo ${{steps.get-tag.output}}
+            echo ${{steps.get-tag.outputs.tag}}
             echo ${{needs.build-push.outputs.tag1}}
             echo "error"
             exit 1
