@@ -104,6 +104,8 @@ jobs:
 
       - name: Build and Push Container
         run: |-
+          echo ${{ steps.tag.outputs.tag }}
+          echo "${{ steps.tag.outputs.tag }}"
           docker build -t "${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}/${{ vars.SERVICE }}:${{ steps.tag.outputs.tag }}" ./
           docker push "${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}/${{ vars.SERVICE }}:${{ steps.tag.outputs.tag }}"
 
