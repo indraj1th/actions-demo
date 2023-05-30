@@ -175,7 +175,9 @@ jobs:
           
         - name: Failure Condition
           if: steps.get-tag.output != needs.build-push.outputs.tag1
-          run: exit 1
+          run: |-
+            echo "error"
+            exit 1
           
   deploy-to-production:
         needs: test-staging
