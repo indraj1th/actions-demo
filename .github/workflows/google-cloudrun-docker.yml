@@ -181,6 +181,7 @@ jobs:
           #if: steps.get-tag.output != needs.build-push.outputs.tag1
           run: |-
             echo ${{steps.get-tag.outputs.tag}}
+            echo "Image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}/${{ vars.SERVICE }}:${{ needs.build-push.outputs.tag1 }} "
             echo ${{needs.build-push.outputs.tag1}}
             echo "error"
             exit 1
