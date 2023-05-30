@@ -138,6 +138,10 @@ jobs:
 
   test-staging:
       needs: deploy-to-staging
+      permissions:
+        id-token: 'write'
+        issues: 'write'
+      environment: dev
       runs-on: ubuntu-latest
 
       steps:  
@@ -151,6 +155,7 @@ jobs:
         # If required, use the Cloud Run url output in later steps
         - name: Show Output
           run: echo ${{ steps.deploy.outputs.url }}
+          
         - name: Google Auth
           id: auth
           uses: 'google-github-actions/auth@v0'
