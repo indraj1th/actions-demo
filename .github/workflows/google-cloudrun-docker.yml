@@ -62,7 +62,7 @@ jobs:
       contents: 'read'
       id-token: 'write'
     outputs:
-      tag1: ${{ steps.tag.outputs.tag }}
+      git-tag: ${{ steps.tag.outputs.tag }}
     runs-on: ubuntu-latest
     environment: dev
     steps:
@@ -136,7 +136,7 @@ jobs:
           service: ${{ vars.SERVICE }}
           region: ${{ vars.REGION }}
           # NOTE: If using a pre-built image, update the image name here
-          image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}/${{ vars.SERVICE }}:${{ needs.build-push.outputs.tag1 }}
+          image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}/${{ vars.SERVICE }}:${{ needs.build-push.outputs.git-tag }}
 
   test-staging:
       needs: 
@@ -178,12 +178,10 @@ jobs:
           run: |
             echo "tag=$(gcloud run services describe ${{ vars.SERVICE }} --region=${{ vars.REGION }} | grep Image | awk -F: '{print $3}')" >> $GITHUB_OUTPUT
         
-        - name: Failure Condition
-          if: ${{steps.get-tag.outputs.tag == needs.build-push.outputs.tag1 }}
-          #if: ${{steps.get-tag.outputs.tag}} != ${{steps.image.outputs.image}}
-          #if: steps.get-tag.output != needs.build-push.outputs.tag1
+        - name: Check image version
+          if: ${{steps.get-tag.outputs.tag != needs.build-push.outputs.git-tag }}
           run: |-
-            echo "Error: Version mismatch, Expected ${{needs.build-push.outputs.tag1}} but got ${{steps.get-tag.outputs.tag}}"
+            echo "Error: Version mismatch, Expected ${{needs.build-push.outputs.git-tag}} but got ${{steps.get-tag.outputs.tag}}"
             exit 1
           
   deploy-to-production:
@@ -210,5 +208,4 @@ jobs:
             with:
               service: ${{ vars.SERVICE }}
               region: ${{ vars.REGION }}
-              # NOTE: If using a pre-built image, update the image name here
-              image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}/${{ vars.SERVICE }}:${{ needs.build-push.outputs.tag1 }}
+              image: ${{ vars.GAR_LOCATION }}-docker.pkg.dev/${{ vars.PROJECT_ID }}/${{ vars.SERVICE }}/${{ vars.SERVICE }}:${{ needs.build-push.outputs.git-tag }}
