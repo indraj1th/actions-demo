@@ -153,8 +153,8 @@ jobs:
             timeout: 2000
             interval: 500
         # If required, use the Cloud Run url output in later steps
-        - name: Show Output
-          run: echo ${{ steps.deploy.outputs.url }}
+        #- name: Show Output
+         #run: echo ${{ steps.deploy.outputs.url }}
           
         - name: Google Auth
           id: auth
@@ -176,8 +176,8 @@ jobs:
         - name: Failure Condition
           #if: steps.get-tag.output != needs.build-push.outputs.tag1
           run: |-
-            echo "${{steps.get-tag.output}}"
-            echo "${{needs.build-push.outputs.tag1}}"
+            echo ${{steps.get-tag.output}}
+            echo ${{needs.build-push.outputs.tag1}}
             echo "error"
             exit 1
           
