@@ -175,7 +175,7 @@ jobs:
 
         - name: 'Use gcloud CLI'
           id: get-tag
-          run: echo "tag=$(gcloud run services describe hello --region=us-central1 | grep Image)" >> $GITHUB_OUTPUT
+          run: echo "tag=$(gcloud run services describe ${{ vars.SERVICE }} --region=${{ vars.REGION }} | grep Image)" >> $GITHUB_OUTPUT
           
         - name: Failure Condition
           #if: steps.get-tag.output != needs.build-push.outputs.tag1
