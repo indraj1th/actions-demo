@@ -176,6 +176,8 @@ jobs:
         - name: Failure Condition
           #if: steps.get-tag.output != needs.build-push.outputs.tag1
           run: |-
+            echo "${{steps.get-tag.output}}"
+            echo "${{needs.build-push.outputs.tag1}}"
             echo "error"
             exit 1
           
