@@ -185,7 +185,9 @@ jobs:
             exit 1
           
   deploy-to-production:
-        needs: test-staging
+        needs:
+          - build-push
+          - test-staging
         permissions:
           id-token: 'write'
         environment: prod
