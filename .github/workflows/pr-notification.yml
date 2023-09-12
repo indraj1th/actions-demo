@@ -11,11 +11,11 @@ jobs:
     steps:
     - name: Git Pull_request details
       run: |
-          echo "Pull request creator: ${{ github.event.pull_request.user.login }}"
+          echo "Pull request creator: ${{ github.event.pull_request.user.name }}"
           echo "Pull request title: ${{ github.event.pull_request.title }}"
           echo "Pull request number: ${{ github.event.pull_request.number }}"
           echo "Pull request url: ${{ github.event.pull_request.html_url }}"
-          echo "Pull request reviewers: ${{ join(github.event.pull_request.requested_reviewers.*.login) }}"
+          echo "Pull request reviewers: ${{ join(github.event.pull_request.requested_reviewers.*.name) }}"
 
     - name: Google Chat Notification
       run: |
@@ -34,7 +34,7 @@ jobs:
                                   {
                                      "keyValue": {
                                           "topLabel": "Creator",
-                                          "content": "${{ github.event.pull_request.user.name }}"
+                                          "content": "${{ github.event.pull_request.user.login }}"
                                       },
                                    },
                                    {
@@ -46,7 +46,7 @@ jobs:
                                    {
                                      "keyValue": {
                                           "topLabel": "Reviewers",
-                                          "content": "- ${{ join(github.event.pull_request.requested_reviewers.*.name) }}"
+                                          "content": "- ${{ join(github.event.pull_request.requested_reviewers.*.login) }}"
                                       }
                                    },
                                    {
