@@ -3,6 +3,7 @@ name: Pull request tracker
 on:
   pull_request:
     types: [opened]
+ 
     
 jobs:
   build:
@@ -11,11 +12,11 @@ jobs:
     steps:
     - name: Git Pull_request details
       run: |
-          echo "Pull request creator: ${{ github.event.pull_request.user.login }}"
+          echo "Pull request creator: ${{ github.event.pull_request.user.name }}"
           echo "Pull request title: ${{ github.event.pull_request.title }}"
           echo "Pull request number: ${{ github.event.pull_request.number }}"
           echo "Pull request url: ${{ github.event.pull_request.html_url }}"
-          echo "Pull request reviewers: ${{ join(github.event.pull_request.requested_reviewers.*.login) }}"
+          echo "Pull request reviewers: ${{ join(github.event.pull_request.requested_reviewers.*.name) }}"
 
     - name: Google Chat Notification
       run: |
@@ -53,7 +54,7 @@ jobs:
                                       "buttons": [
                                           {
                                               "textButton": {
-                                                  "text": "OPEN ISSUE",
+                                                  "text": "VIEW PR",
                                                   "onClick": {
                                                       "openLink": {
                                                           "url": "${{ github.event.pull_request.html_url }}"
