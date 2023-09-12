@@ -34,7 +34,7 @@ jobs:
                                   {
                                      "keyValue": {
                                           "topLabel": "Creator",
-                                          "content": "${{ github.event.pull_request.user.login }}"
+                                          "content": "${{ github.event.pull_request.user.name }}"
                                       },
                                    },
                                    {
@@ -46,14 +46,14 @@ jobs:
                                    {
                                      "keyValue": {
                                           "topLabel": "Reviewers",
-                                          "content": "- ${{ join(github.event.pull_request.requested_reviewers.*.login) }}"
+                                          "content": "- ${{ join(github.event.pull_request.requested_reviewers.*.name) }}"
                                       }
                                    },
                                    {
                                       "buttons": [
                                           {
                                               "textButton": {
-                                                  "text": "OPEN ISSUE",
+                                                  "text": "VIEW PR",
                                                   "onClick": {
                                                       "openLink": {
                                                           "url": "${{ github.event.pull_request.html_url }}"
